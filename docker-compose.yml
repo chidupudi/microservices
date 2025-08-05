@@ -1,0 +1,143 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: healthcare-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - healthcare-network
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: healthcare-api-gateway:latest
+    container_name: healthcare-api-gateway
+    restart: unless-stopped
+    ports:
+      - "9000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - USER_SERVICE_URL=http://user-service:5001
+      - APPOINTMENT_SERVICE_URL=http://appointment-service:5002
+      - MEDICAL_RECORDS_SERVICE_URL=http://medical-records-service:5003
+      - BILLING_SERVICE_URL=http://billing-service:5004
+    depends_on:
+      - user-service
+      - appointment-service
+      - medical-records-service
+      - billing-service
+    networks:
+      - healthcare-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    image: healthcare-user-service:latest
+    container_name: healthcare-user-service
+    restart: unless-stopped
+    ports:
+      - "6001:5001"
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/healthcare_users?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - healthcare-network
+
+  # Appointment Service
+  appointment-service:
+    build:
+      context: ./appointment-service
+      dockerfile: Dockerfile
+    image: healthcare-appointment-service:latest
+    container_name: healthcare-appointment-service
+    restart: unless-stopped
+    ports:
+      - "6002:5002"
+    environment:
+      - NODE_ENV=production
+      - PORT=5002
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/healthcare_appointments?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - healthcare-network
+
+  # Medical Records Service
+  medical-records-service:
+    build:
+      context: ./medical-records-service
+      dockerfile: Dockerfile
+    image: healthcare-medical-records-service:latest
+    container_name: healthcare-medical-records-service
+    restart: unless-stopped
+    ports:
+      - "6003:5003"
+    environment:
+      - NODE_ENV=production
+      - PORT=5003
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/healthcare_medical_records?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - healthcare-network
+
+  # Billing Service
+  billing-service:
+    build:
+      context: ./billing-service
+      dockerfile: Dockerfile
+    image: healthcare-billing-service:latest
+    container_name: healthcare-billing-service
+    restart: unless-stopped
+    ports:
+      - "6004:5004"
+    environment:
+      - NODE_ENV=production
+      - PORT=5004
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/healthcare_billing?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - healthcare-network
+
+  # React Frontend Client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: healthcare-client:latest
+    container_name: healthcare-client
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_GATEWAY_URL=http://localhost:9000
+    depends_on:
+      - api-gateway
+    networks:
+      - healthcare-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  healthcare-network:
+    driver: bridge

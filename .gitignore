@@ -74,7 +74,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public (commented out - React public folder should be committed)
 
 # Storybook build outputs
 .out

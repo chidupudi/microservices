@@ -8,13 +8,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --only=production
 
 # Copy the rest of your application code to the container
 COPY . .
 
 # Expose the port that the app runs on
-EXPOSE 3000
+EXPOSE 8000
 
 # Start the application
 CMD ["npm", "start"]
