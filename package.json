@@ -1,0 +1,33 @@
+{
+  "name": "healthcare-microservices",
+  "version": "1.0.0",
+  "description": "Healthcare application split into microservices",
+  "scripts": {
+    "install-all": "npm run install-client & npm run install-gateway & npm run install-user & npm run install-appointment & npm run install-medical & npm run install-billing",
+    "install-client": "cd client && npm install",
+    "install-gateway": "cd api-gateway && npm install",
+    "install-user": "cd user-service && npm install",
+    "install-appointment": "cd appointment-service && npm install",
+    "install-medical": "cd medical-records-service && npm install",
+    "install-billing": "cd billing-service && npm install",
+    "start-all": "concurrently \"npm run start-client\" \"npm run start-gateway\" \"npm run start-user\" \"npm run start-appointment\" \"npm run start-medical\" \"npm run start-billing\"",
+    "start-client": "cd client && npm start",
+    "start-gateway": "cd api-gateway && npm start",
+    "start-user": "cd user-service && npm start",
+    "start-appointment": "cd appointment-service && npm start",
+    "start-medical": "cd medical-records-service && npm start",
+    "start-billing": "cd billing-service && npm start",
+    "dev-all": "concurrently \"npm run dev-client\" \"npm run dev-gateway\" \"npm run dev-user\" \"npm run dev-appointment\" \"npm run dev-medical\" \"npm run dev-billing\"",
+    "dev-client": "cd client && npm start",
+    "dev-gateway": "cd api-gateway && npm run dev",
+    "dev-user": "cd user-service && npm run dev",
+    "dev-appointment": "cd appointment-service && npm run dev",
+    "dev-medical": "cd medical-records-service && npm run dev",
+    "dev-billing": "cd billing-service && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
