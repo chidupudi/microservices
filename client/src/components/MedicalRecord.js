@@ -23,7 +23,7 @@ const MedicalRecordManagement = () => {
 
     try {
       // API call to the backend to save the medical record
-      const response = await axios.post('http://localhost:8000/api/records', {
+      const response = await axios.post('http://localhost:9000/api/records', {
         patientName,
         patientId,
         dateOfBirth,

@@ -16,7 +16,7 @@ const AppointmentScheduling = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:8000/api/appointments', {
+      await axios.post('http://localhost:9000/api/appointments', {
         patientName,
         date,
         time,

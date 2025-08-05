@@ -52,7 +52,7 @@ const Signup = () => {
     setFieldErrors({});
     
     try {
-      await axios.post('http://localhost:8000/api/signup', { 
+      await axios.post('http://localhost:9000/api/signup', { 
         username,
         email,
         password,

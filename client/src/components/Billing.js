@@ -43,7 +43,7 @@ const Billing = () => {
 
     try {
       // API call to the backend to process billing
-      const response = await axios.post('http://localhost:8000/api/billings', {
+      const response = await axios.post('http://localhost:9000/api/billings', {
         patientName,
         patientId,
         serviceType,

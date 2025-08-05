@@ -10,10 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 const SERVICES = {
-  USER: 'http://localhost:5001',
-  APPOINTMENT: 'http://localhost:5002',
-  MEDICAL_RECORDS: 'http://localhost:5003',
-  BILLING: 'http://localhost:5004'
+  USER: process.env.USER_SERVICE_URL || 'http://user-service:5001',
+  APPOINTMENT: process.env.APPOINTMENT_SERVICE_URL || 'http://appointment-service:5002',
+  MEDICAL_RECORDS: process.env.MEDICAL_RECORDS_SERVICE_URL || 'http://medical-records-service:5003',
+  BILLING: process.env.BILLING_SERVICE_URL || 'http://billing-service:5004'
 };
 
 const forwardRequest = async (req, res, serviceUrl) => {
