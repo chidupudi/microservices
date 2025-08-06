@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medical-records-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medical-records-service
+  template:
+    metadata:
+      labels:
+        app: medical-records-service
+    spec:
+      containers:
+      - name: medical-records-service
+        image: healthcare-medical-records-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5003
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://admin:password@mongodb-service:27017/healthcare_medical_records?authSource=admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medical-records-service
+spec:
+  selector:
+    app: medical-records-service
+  ports:
+    - protocol: TCP
+      port: 5003
+      targetPort: 5003

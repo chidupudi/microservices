@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-service
+  template:
+    metadata:
+      labels:
+        app: billing-service
+    spec:
+      containers:
+      - name: billing-service
+        image: healthcare-billing-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5004
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://admin:password@mongodb-service:27017/healthcare_billing?authSource=admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing-service
+spec:
+  selector:
+    app: billing-service
+  ports:
+    - protocol: TCP
+      port: 5004
+      targetPort: 5004
